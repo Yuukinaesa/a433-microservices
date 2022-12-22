@@ -4,6 +4,6 @@ docker build . -t yuukinaesa/karsajobs:latest
 # membuat tag baru dari karsajobs:latest ke github yuukinaesa ghcr.io/yuukinaesa/karsajobs:latest
 docker tag yuukinaesa/karsajobs:latest ghcr.io/yuukinaesa/karsajobs:latest
 # login ke Github Package
-echo $CR_PAT | docker login ghcr.io --username yuukinaesa --password-stdin
+echo $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 | docker login ghcr.io --username yuukinaesa --password-stdin
 # push ke Github Package  
 docker push ghcr.io/yuukinaesa/karsajobs:latest
