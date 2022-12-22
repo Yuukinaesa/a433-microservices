@@ -43,3 +43,4 @@ jobs:   # Proses alur kerja yang terdiri dari satu atau beberapa pekerjaan secar
           tags: |     # Menggunakan tags sebagai berikut
               ghcr.io/yuukinaesa/karsajobs-ui:latest
           push: true  # Melakukan push
+          
