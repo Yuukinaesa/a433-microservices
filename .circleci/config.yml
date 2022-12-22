@@ -1,6 +1,9 @@
-version: "2.1"
+version: 2.1
 orbs:
   docker: circleci/docker@2.1.4
+  auth:
+          username: yuukinaesa
+          password: dckr_pat_vbtBpTCNzlUZ6YPrCEwp7IFcyOw  # context / project UI env-var reference
 jobs:
   build:
     executor: docker/machine
@@ -13,6 +16,7 @@ jobs:
           command: go test -v -short --count=1 $(go list ./...)
       - run:
           command: chmod +x build_push_image_karsajobs.sh && ./build_push_image_karsajobs.sh
+       
 workflows:
   lint-and-build-dockerfile:
     jobs:
