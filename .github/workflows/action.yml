@@ -1,0 +1,51 @@
+# Nama dari workflow CI
+name: karsajobs ci
+
+
+# Mengontrol kapan alur kerja akan berjalan
+on:
+# Mentrigger Push dan pull request hanya untuk branch "karsajobs"
+  push:
+    branches: [ "karsajobs" ]
+  pull_request:
+    branches: [ "karsajobs" ]
+
+
+jobs:   # Proses alur kerja yang terdiri dari satu atau beberapa pekerjaan secara berurutan
+  build:    # Alur "jobs" ini berisi satu tugas yang disebut "build"
+    runs-on: ubuntu-latest    # Runner berjalan pada os ubuntu
+
+
+    steps:    # urutan tugas yang akan dieksekusi sebagai bagian dari "jobs"
+      - name: Checkout repository   # memeriksa repositori ke runner, serta memungkinkan runner untuk menjalankan skrip atau kode
+        uses: actions/checkout@v3.1.0
+      
+      
+      # Login ke Github
+      - name: Login ke Github
+        uses: docker/login-action@v2.1.0
+        with:
+          registry: ghcr.io      # Login ke registry ghcr.io atau Github Package
+          username: ${{ github.actor }}     # Username diambil dari Github Actor/user
+          password: ${{ secrets.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 }}     # Password berasal dari secrets Github Token
+
+    
+      # Proses untuk menginstal hadolint dan menjalankannya terhadap berkas Dockerfile
+      - name: lint-dockerfile
+        uses: hadolint/hadolint-action@v3.0.0
+
+
+      # Menjalankan test app
+      - name: Test-app  
+        run: |    # menjalankan perintah sebagai berikut
+          go test -v -short --count=1 $(go list ./...)
+          
+          
+      # Melakukan build dan push docker image  
+      - name: build-app-karsajobs
+        uses: docker/build-push-action@v3.2.0
+        with:
+          context: .
+          tags: |     # Menggunakan tags sebagai berikut
+              ghcr.io/hyedra64/karsajobs:latest
+          push: true  # Melakukan push
