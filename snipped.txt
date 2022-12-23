@@ -50,7 +50,7 @@ kubectl expose service -n monitoring prometheus-server --type=NodePort --target-
 minikube service -n monitoring prometheus-server-ext
 
 "log"
-kubectl get pods
+kubectl get all -n monitoring > monitoring.txt
 
 minikube addons list >> minikube addons enable dashboard << mengaktifkan fitur dashboard
 
