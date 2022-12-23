@@ -1,0 +1,6 @@
+Github: https://github.com/yuukinaesa/a433-microservices
+Github Package Karsajobs: https://github.com/yuukinaesa/a433-microservices/pkgs/container/karsajobs
+Github Package Karsajobs UI: https://github.com/yuukinaesa/a433-microservices/pkgs/container/karsajobs-ui
+Github Workflows Karsajob: https://github.com/Yuukinaesa/a433-microservices/actions/runs/3758348960
+Github Workflows Karsajobs UI: https://github.com/Yuukinaesa/a433-microservices/actions/runs/3758342482
+File Kubernetes & screenshot: di branch kubernetes
