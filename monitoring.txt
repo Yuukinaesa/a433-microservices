@@ -1,0 +1,28 @@
+NAME                                          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+service/grafana                               ClusterIP   10.106.131.69    <none>        80/TCP         37m
+service/grafana-ext                           NodePort    10.97.58.16      <none>        80:31378/TCP   34m
+service/prometheus-alertmanager               ClusterIP   10.108.181.50    <none>        9093/TCP       52m
+service/prometheus-alertmanager-headless      ClusterIP   None             <none>        9093/TCP       52m
+service/prometheus-kube-state-metrics         ClusterIP   10.105.180.133   <none>        8080/TCP       52m
+service/prometheus-prometheus-node-exporter   ClusterIP   10.109.163.50    <none>        9100/TCP       52m
+service/prometheus-prometheus-pushgateway     ClusterIP   10.100.121.244   <none>        9091/TCP       52m
+service/prometheus-server                     ClusterIP   10.111.38.155    <none>        80/TCP         52m
+service/prometheus-server-ext                 NodePort    10.107.63.209    <none>        80:30592/TCP   43m
+
+NAME                                                 DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/prometheus-prometheus-node-exporter   1         1         1       1            1           <none>          52m
+
+NAME                                                READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/grafana                             1/1     1            1           37m
+deployment.apps/prometheus-kube-state-metrics       1/1     1            1           52m
+deployment.apps/prometheus-prometheus-pushgateway   1/1     1            1           52m
+deployment.apps/prometheus-server                   1/1     1            1           52m
+
+NAME                                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/grafana-cf65896bb                             1         1         1       37m
+replicaset.apps/prometheus-kube-state-metrics-5fdc4f6d6c      1         1         1       52m
+replicaset.apps/prometheus-prometheus-pushgateway-5c567c4cb   1         1         1       52m
+replicaset.apps/prometheus-server-84b9498599                  1         1         1       52m
+
+NAME                                       READY   AGE
+statefulset.apps/prometheus-alertmanager   1/1     52m

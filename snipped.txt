@@ -1,0 +1,127 @@
+!!SNIPPETS!!
+
+package manager choco
+
+choco install minikube
+choco install kubernetes-cli
+choco install helm choco
+
+minikube start
+minikube dashboard
+
+#install package dari github
+kubectl apply -f mongodb
+kubectl apply -f frontend
+kubectl apply -f backend
+
+
+
+#repo helm
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+
+#bungkus container grafana dan prometheus
+kubectl create ns monitoring
+
+#install grafana
+kubectl create deployment grafana -n monitoring --image=docker.io/grafana/grafana:latest
+
+#atau pakai helm
+helm install -n monitoring grafana  grafana/grafana
+
+#cek di base 64
+SL7Jhg7wY3Mu1SxPdVeuVDiied0nKNFd7cfkDCub << password grafana
+
+#expose
+kubectl expose service -n monitoring grafana --type=NodePort --target-port=3000 --name=grafana-ext
+
+#jalan
+minikube service -n monitoring grafana-ext
+
+#install prometheus
+helm install -n monitoring prometheus prometheus-community/prometheus
+
+#expose 
+kubectl expose service -n monitoring prometheus-server --type=NodePort --target-port=9090 --name=prometheus-server-ext
+
+#jalan 
+minikube service -n monitoring prometheus-server-ext
+
+"log"
+kubectl get pods
+
+minikube addons list >> minikube addons enable dashboard << mengaktifkan fitur dashboard
+
+
+~~~~~
+
+NAME: grafana
+LAST DEPLOYED: Fri Dec 23 22:05:49 2022
+NAMESPACE: monitoring
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get your 'admin' user password by running:
+
+   kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+2. The Grafana server can be accessed via port 80 on the following DNS name from within your cluster:
+
+   grafana.monitoring.svc.cluster.local
+
+   Get the Grafana URL to visit by running these commands in the same shell:
+     export POD_NAME=$(kubectl get pods --namespace monitoring -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
+     kubectl --namespace monitoring port-forward $POD_NAME 3000
+
+3. Login with the password from step 1 and the username: admin
+#################################################################################
+######   WARNING: Persistence is disabled!!! You will lose your data when   #####
+######            the Grafana pod is terminated.                            #####
+#################################################################################
+
+~~~~~
+
+NAME: prometheus
+LAST DEPLOYED: Fri Dec 23 23:22:18 2022
+NAMESPACE: monitoring
+STATUS: deployed
+REVISION: 1
+NOTES:
+The Prometheus server can be accessed via port 80 on the following DNS name from within your cluster:
+prometheus-server.monitoring.svc.cluster.local
+
+
+Get the Prometheus server URL by running these commands in the same shell:
+  export POD_NAME=$(kubectl get pods --namespace monitoring -l "app=prometheus,component=server" -o jsonpath="{.items[0].metadata.name}")
+  kubectl --namespace monitoring port-forward $POD_NAME 9090
+
+
+The Prometheus alertmanager can be accessed via port  on the following DNS name from within your cluster:
+prometheus-%!s(<nil>).monitoring.svc.cluster.local
+
+
+Get the Alertmanager URL by running these commands in the same shell:
+  export POD_NAME=$(kubectl get pods --namespace monitoring -l "app=prometheus,component=" -o jsonpath="{.items[0].metadata.name}")
+  kubectl --namespace monitoring port-forward $POD_NAME 9093
+#################################################################################
+######   WARNING: Pod Security Policy has been disabled by default since    #####
+######            it deprecated after k8s 1.25+. use                        #####
+######            (index .Values "prometheus-node-exporter" "rbac"          #####
+###### .          "pspEnabled") with (index .Values                         #####
+######            "prometheus-node-exporter" "rbac" "pspAnnotations")       #####
+######            in case you still need it.                                #####
+#################################################################################
+
+
+The Prometheus PushGateway can be accessed via port 9091 on the following DNS name from within your cluster:
+prometheus-prometheus-pushgateway.monitoring.svc.cluster.local
+
+
+Get the PushGateway URL by running these commands in the same shell:
+  export POD_NAME=$(kubectl get pods --namespace monitoring -l "app=prometheus-pushgateway,component=pushgateway" -o jsonpath="{.items[0].metadata.name}")
+  kubectl --namespace monitoring port-forward $POD_NAME 9091
+
+For more information on running Prometheus, visit:
+https://prometheus.io/
